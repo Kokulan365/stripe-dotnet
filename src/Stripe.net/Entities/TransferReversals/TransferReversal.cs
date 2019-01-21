@@ -18,24 +18,14 @@ namespace Stripe
 
         #region Expandable Balance Transaction
         [JsonIgnore]
-        public string BalanceTransactionId { get; set; }
+        public string BalanceTransactionId => this.InternalBalanceTransaction.Id;
 
         [JsonIgnore]
-        public BalanceTransaction BalanceTransaction { get; set; }
+        public BalanceTransaction BalanceTransaction => this.InternalBalanceTransaction.ExpandedObject;
 
         [JsonProperty("balance_transaction")]
-        internal object InternalBalanceTransaction
-        {
-            get
-            {
-                return this.BalanceTransaction ?? (object)this.BalanceTransactionId;
-            }
-
-            set
-            {
-                StringOrObject<BalanceTransaction>.Map(value, s => this.BalanceTransactionId = s, o => this.BalanceTransaction = o);
-            }
-        }
+        [JsonConverter(typeof(ExpandableFieldConverter<BalanceTransaction>))]
+        internal ExpandableField<BalanceTransaction> InternalBalanceTransaction { get; set; }
         #endregion
 
         [JsonProperty("created")]
@@ -50,24 +40,14 @@ namespace Stripe
 
         #region Expandable Transfer
         [JsonIgnore]
-        public string TransferId { get; set; }
+        public string TransferId => this.InternalTransfer.Id;
 
         [JsonIgnore]
-        public Transfer Transfer { get; set; }
+        public Transfer Transfer => this.InternalTransfer.ExpandedObject;
 
         [JsonProperty("transfer")]
-        internal object InternalTransfer
-        {
-            get
-            {
-                return this.Transfer ?? (object)this.TransferId;
-            }
-
-            set
-            {
-                StringOrObject<Transfer>.Map(value, s => this.TransferId = s, o => this.Transfer = o);
-            }
-        }
+        [JsonConverter(typeof(ExpandableFieldConverter<Transfer>))]
+        internal ExpandableField<Transfer> InternalTransfer { get; set; }
         #endregion
     }
 }
